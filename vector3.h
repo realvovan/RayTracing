@@ -34,7 +34,7 @@ class Vector3 {
                 this->e[0] * v.e[1] - this->e[1] * v.e[0]
             );
         }
-        Vector3 unit() {return (*this)/this->length();}
+        Vector3 unit() const {return (*this)/this->length();}
         Vector3 operator-() const {
             return Vector3(-e[0], -e[1], -e[2]);
         }

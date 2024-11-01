@@ -12,7 +12,7 @@ class Ray {
         const Point3& origin() const {return orig;}
         const Vector3& direction() const {return dir;}
         Point3 at(double t) const {
-            return this->orig + this->dir * t
+            return this->orig + this->dir * t;
         }
 };
 
