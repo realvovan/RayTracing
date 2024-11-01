@@ -40,19 +40,19 @@ class Vector3 {
         }
         double operator[](int i) const {return e[i];}
         double& operator[](int i) {return e[i];}
-        Vector3 operator+(const Vector3& v) {
+        Vector3 operator+(const Vector3& v) const {
             return Vector3(this->e[0]+v.e[0],this->e[1]+v.e[1],this->e[2]+v.e[2]);
         }
-        Vector3 operator-(const Vector3& v) {
+        Vector3 operator-(const Vector3& v) const {
             return Vector3(this->e[0]-v.e[0],this->e[1]-v.e[1],this->e[2]-v.e[2]);
         }
-        Vector3 operator*(const Vector3& v) {
+        Vector3 operator*(const Vector3& v) const {
             return Vector3(this->e[0]*v.e[0],this->e[1]*v.e[1],this->e[2]*v.e[2]);
         }
-        Vector3 operator*(double other) {
+        Vector3 operator*(double other) const {
             return Vector3(this->e[0]*other,this->e[1]*other,this->e[2]*other);
         }
-        Vector3 operator/(double other) {
+        Vector3 operator/(double other) const {
             return (*this) * (1/other);
         }
         Vector3& operator+=(const Vector3& other) {
