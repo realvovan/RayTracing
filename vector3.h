@@ -22,12 +22,12 @@ class Vector3 {
                 +this->e[2] * this->e[2]
             );
         }
-        double dot(const Vector3& v) {
+        double dot(const Vector3& v) const {
             return this->e[0] * v.e[0]
                 +this->e[1] * v.e[1]
                 +this->e[2] * v.e[2];
         }
-        Vector3 cross(const Vector3& v) {
+        Vector3 cross(const Vector3& v) const {
             return Vector3(
                 this->e[1] * v.e[2] - this->e[2] * v.e[1],
                 this->e[2] * v.e[0] - this->e[0] * v.e[2],
