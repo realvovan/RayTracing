@@ -1,8 +1,7 @@
 #ifndef VEC3_H
 #define VEC3_H
 
-#include "cmath"
-#include "iostream"
+#include "rtweekend.h"
 
 class Vector3 {
     double e[3];
@@ -14,13 +13,13 @@ class Vector3 {
         double x() const {return e[0];}
         double y() const {return e[1];}
         double z() const {return e[2];}
-
-        double length() const {
-            return std::sqrt(
-                this->e[0] * this->e[0]
+        double length_squared() const {
+            return this->e[0] * this->e[0]
                 +this->e[1] * this->e[1]
-                +this->e[2] * this->e[2]
-            );
+                +this->e[2] * this->e[2];
+        }
+        double length() const {
+            return(this->length_squared());
         }
         double dot(const Vector3& v) const {
             return this->e[0] * v.e[0]

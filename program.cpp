@@ -1,18 +1,13 @@
-#include "iostream"
-#include "vector3.h"
-#include "color.h"
-#include "ray.h"
+#include "rtweekend.h"
+#include "hittable.h"
+#include "hittable_list.h"
+#include "sphere.h"
 
-bool does_hit_sphere(const Point3& center, double radius, const Ray& ray) {
-    Vector3 oc = center - ray.origin();
-    auto a = ray.direction().dot(ray.direction());
-    auto b = ray.direction().dot(oc) * -2.0;
-    auto c = oc.dot(oc) - radius * radius;
-    return (b*b - 4*a*c) >= 0;
-}
-
-Color ray_color(const Ray& r) {
-    if(does_hit_sphere(Point3(0,0,-1),.5,r)) return Color(1,0,0);
+Color ray_color(const Ray& r, const Hittable& wolrd) {
+    HitRecord rec;
+    if(wolrd.hit(r,Interval(0,HUGE),rec)) {
+        return (rec.normal + Color(1,1,1)) * .5;
+    }
 
     Vector3 unit_direction = r.direction().unit();
     auto a = (unit_direction.y() + 1.0) * .5;
@@ -26,6 +21,10 @@ int main() {
     //calculate the image height and ensure that it's at least 1
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
+    //world
+    HittableList world;
+    world.add(make_shared<Sphere>(Point3(0,0,-1),.5));
+    world.add(make_shared<Sphere>(Point3(0,-100.5,-1),100));
     //camera
     auto focal_lenght = 1.0;
     auto viewport_height = 2.0;
@@ -51,7 +50,7 @@ int main() {
             auto ray_direction = pixel_center - camera_center;
             Ray r(camera_center, ray_direction);
 
-            Color pixel_color = ray_color(r);
+            Color pixel_color = ray_color(r,world);
             write_color(pixel_color);
         }
     }
