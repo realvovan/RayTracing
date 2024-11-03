@@ -12,6 +12,8 @@ class Camera {
         int image_width = 100;
         //Count of random samples for each pixel
         int samples_per_pixel = 10;
+        //Maximum number of ray bounces into scene
+        int max_depth = 10;
 
         void render(const Hittable& world) {
             init();
@@ -23,7 +25,7 @@ class Camera {
                     Color pixel_color(0,0,0);
                     for(int sample = 0; sample < samples_per_pixel; sample++) {
                         Ray ray = get_ray(x,y);
-                        pixel_color += ray_color(ray,world);
+                        pixel_color += ray_color(ray,max_depth,world);
                     }
                     write_color(pixel_color * pixel_samples_scale);
                 }
@@ -83,10 +85,14 @@ class Camera {
             return Vector3(random_double() - .5, random_double() - .5, 0);
         }
 
-        Color ray_color(const Ray& r, const Hittable& world) const {
+        Color ray_color(const Ray& r, int depth, const Hittable& world) const {
+            //if we've exceeded the ray bounce limit, no more light is gathered
+            if(depth <= 0) return Color(0,0,0);
+            
             HitRecord rec;
-            if(world.hit(r,Interval(0,HUGE),rec)) {
-                return (rec.normal + Color(1,1,1)) * .5;
+            if(world.hit(r,Interval(0.001,HUGE),rec)) {
+                Vector3 direction = rec.normal + Vector3::random_unit_vector();
+                return ray_color(Ray(rec.p,direction),depth-1,world) * .1;
             }
 
             Vector3 unit_direction = r.direction().unit();

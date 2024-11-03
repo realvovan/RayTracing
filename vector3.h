@@ -10,6 +10,13 @@ class Vector3 {
         Vector3() : e{0,0,0} {}
         Vector3(double e0, double e1, double e2) : e{e0, e1, e2} {}
 
+        static Vector3 random() {
+            return Vector3(random_double(),random_double(),random_double());
+        }
+        static Vector3 random(double min, double max) {
+            return Vector3(random_double(min,max),random_double(min,max),random_double(min,max));
+        }
+
         double x() const {return e[0];}
         double y() const {return e[1];}
         double z() const {return e[2];}
@@ -33,7 +40,22 @@ class Vector3 {
                 this->e[0] * v.e[1] - this->e[1] * v.e[0]
             );
         }
-        Vector3 unit() const {return (*this)/this->length();}
+        inline Vector3 unit() const {return (*this)/this->length();}
+
+        inline static Vector3 random_unit_vector() {
+            while(true) {
+                auto p = Vector3::random(-1,1);
+                auto lensq = p.length_squared();
+                if(1e-60 < lensq && lensq <= 1) return p / sqrt(lensq);
+            }
+        }
+
+        inline static Vector3 random_on_hemisphere(const Vector3& normal) {
+            Vector3 on_unit_sphere = Vector3::random_unit_vector();
+            if(on_unit_sphere.dot(normal) > 0.0) return on_unit_sphere;
+            else return -on_unit_sphere;
+        }
+
         Vector3 operator-() const {
             return Vector3(-e[0], -e[1], -e[2]);
         }
