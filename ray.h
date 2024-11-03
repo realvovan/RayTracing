@@ -9,6 +9,7 @@ class Ray {
         Vector3 dir;
 
     public:
+        Ray() {}
         Ray(const Point3& origin, const Vector3& direction) : orig(origin), dir(direction) {}
         const Point3& origin() const {return orig;}
         const Vector3& direction() const {return dir;}

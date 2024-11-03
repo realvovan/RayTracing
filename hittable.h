@@ -3,12 +3,15 @@
 
 #include "rtweekend.h"
 
+class Material;
+
 class HitRecord {
     public:
         Point3 p;
         Vector3 normal;
         double t;
         bool front_face;
+        shared_ptr<Material> mat;
 
         //Sets the hit record normal vector
         //@param outward_normal: NOTE this parameter is assumed to have unit length

@@ -7,8 +7,12 @@ class Vector3 {
     double e[3];
 
     public:
+        //Constructors
+
         Vector3() : e{0,0,0} {}
         Vector3(double e0, double e1, double e2) : e{e0, e1, e2} {}
+
+        //Statics
 
         static Vector3 random() {
             return Vector3(random_double(),random_double(),random_double());
@@ -16,10 +20,31 @@ class Vector3 {
         static Vector3 random(double min, double max) {
             return Vector3(random_double(min,max),random_double(min,max),random_double(min,max));
         }
+        inline static Vector3 random_unit_vector() {
+            while(true) {
+                auto p = Vector3::random(-1,1);
+                auto lensq = p.length_squared();
+                if(1e-60 < lensq && lensq <= 1) return p / sqrt(lensq);
+            }
+        }
+        inline static Vector3 random_on_hemisphere(const Vector3& normal) {
+            Vector3 on_unit_sphere = Vector3::random_unit_vector();
+            if(on_unit_sphere.dot(normal) > 0.0) return on_unit_sphere;
+            else return -on_unit_sphere;
+        }
 
         double x() const {return e[0];}
         double y() const {return e[1];}
         double z() const {return e[2];}
+        bool near_zero() const {
+            auto s = 1e-8;
+            return (std::fabs(this->e[0]) < s)
+                    && (std::fabs(this->e[1]) < s)
+                    && (std::fabs(this->e[2]) < s);
+        }
+        inline Vector3 reflect(const Vector3& other) const {
+            return (*this) - other * 2 * this->dot(other);
+        }
         double length_squared() const {
             return this->e[0] * this->e[0]
                 +this->e[1] * this->e[1]
@@ -42,19 +67,7 @@ class Vector3 {
         }
         inline Vector3 unit() const {return (*this)/this->length();}
 
-        inline static Vector3 random_unit_vector() {
-            while(true) {
-                auto p = Vector3::random(-1,1);
-                auto lensq = p.length_squared();
-                if(1e-60 < lensq && lensq <= 1) return p / sqrt(lensq);
-            }
-        }
-
-        inline static Vector3 random_on_hemisphere(const Vector3& normal) {
-            Vector3 on_unit_sphere = Vector3::random_unit_vector();
-            if(on_unit_sphere.dot(normal) > 0.0) return on_unit_sphere;
-            else return -on_unit_sphere;
-        }
+        //Operators
 
         Vector3 operator-() const {
             return Vector3(-e[0], -e[1], -e[2]);
