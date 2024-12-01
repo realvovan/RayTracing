@@ -8,7 +8,7 @@
 int main() {
     HittableList world;
 
-    auto material_ground = make_shared<Lambertian>(Color(.8,.8,0.0));
+    auto material_ground = make_shared<Lambertian>(Color(.8,.8,0.1));
     auto material_center = make_shared<Lambertian>(Color(.1,.2,.5));
     auto material_left = make_shared<Metal>(Color(.8,.8,.8),.3);
     auto material_right = make_shared<Metal>(Color(.8,.6,.2),1.0);
